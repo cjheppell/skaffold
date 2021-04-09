@@ -1200,6 +1200,10 @@ type DockerArtifact struct {
 	// For example: `{"key1": "value1", "key2": "value2"}`.
 	BuildArgs map[string]*string `yaml:"buildArgs,omitempty"`
 
+	// AdditionalBuildOptions are extra cli options to pass to the docker build command.
+	// See https://docs.docker.com/engine/reference/commandline/build/#options for possible options.
+	AdditionalBuildOptions map[string]*string `yaml:"buildOptions,omitempty"`
+
 	// NetworkMode is passed through to docker and overrides the
 	// network configuration of docker builder. If unset, use whatever
 	// is configured in the underlying docker daemon. Valid modes are

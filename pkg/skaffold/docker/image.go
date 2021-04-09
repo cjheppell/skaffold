@@ -516,6 +516,14 @@ func ToCLIBuildArgs(a *latest.DockerArtifact, evaluatedArgs map[string]*string) 
 		args = append(args, "--ssh", a.SSH)
 	}
 
+	for option, value := range a.AdditionalBuildOptions {
+		if value != nil {
+			args = append(args, fmt.Sprintf("--%s", option), *value)
+		} else {
+			args = append(args, fmt.Sprintf("--%s", option))
+		}
+	}
+
 	return args, nil
 }
 
