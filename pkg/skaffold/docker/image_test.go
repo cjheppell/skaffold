@@ -139,6 +139,10 @@ func TestBuild(t *testing.T) {
 				Target:      "target",
 				NetworkMode: "None",
 				NoCache:     true,
+				AdditionalBuildOptions: map[string]*string{
+					"--cpuset-cpus": util.StringPtr("0"),
+					"--force-rm":    nil,
+				},
 			},
 			mode: config.RunModes.Dev,
 			expected: types.ImageBuildOptions{
@@ -375,6 +379,36 @@ func TestGetBuildArgs(t *testing.T) {
 				SSH: "default",
 			},
 			want: []string{"--ssh", "default"},
+		},
+		{
+			description: "additional build options with value",
+			artifact: &latest.DockerArtifact{
+				AdditionalBuildOptions: map[string]*string{
+					"cpuset-cpus": util.StringPtr("0"),
+					"memory":      util.StringPtr("100m"),
+				},
+			},
+			want: []string{"--cpuset-cpus", "0", "--memory", "100m"},
+		},
+		{
+			description: "additional build options with no value",
+			artifact: &latest.DockerArtifact{
+				AdditionalBuildOptions: map[string]*string{
+					"compress": nil,
+					"force-rm": nil,
+				},
+			},
+			want: []string{"--compress", "--force-rm"},
+		},
+		{
+			description: "additional build options with values and no values",
+			artifact: &latest.DockerArtifact{
+				AdditionalBuildOptions: map[string]*string{
+					"compress": nil,
+					"memory":   util.StringPtr("100m"),
+				},
+			},
+			want: []string{"--compress", "--memory", "100m"},
 		},
 		{
 			description: "all",
